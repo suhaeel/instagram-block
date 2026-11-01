@@ -35,3 +35,11 @@ Escape every value with `esc_attr` / `esc_url` / `esc_html` / `wp_kses_post` for
 ## Not covered
 - Unless a row says "Verified", I only read the code. No automated tests were run.
 - Chrome-only and WordPress 7.1.3 / PHP 8.2 on Local where something was run.
+
+## Fix branch
+Branch `fix/escape-output-and-api-handling`, pushed to the fork `suhaeel/instagram-block`. Based on the default branch; the default branch itself is untouched.
+
+Escapes every value in the render callback (`esc_attr`, `esc_url`, `esc_html`, `sanitize_html_class`, quoted attributes), `rawurlencode`s the token, adds a request timeout and an HTTP status check, caches only a real `data` response, uses `wp_date`, and builds the default profile image URL from the plugin URL.
+
+Tested: with a fake cached API response and the same hostile values as above, the output has 0 elements with `on*` attributes (before: injected in all 4 places) and a `javascript:` permalink is dropped. With normal data, the markup renders as before (links, new tab with `rel="noopener noreferrer"`, escaped caption, formatted date).
+Not done: the Instagram API itself, the unbuilt `dist/`, and a decision on storing the token outside the block attributes.
